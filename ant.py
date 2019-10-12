@@ -3,7 +3,10 @@ import pickle
 
 
 class Ant():
-    """Class for synthetic ant"""
+    """
+    Class for synthetic ant
+    
+    """
 
     def __init__(self, n_nodes, alpha, beta):
 
@@ -11,7 +14,6 @@ class Ant():
         with open('names.txt', 'rb') as f:
             names = pickle.load(f)
         self.name = np.random.choice(names)
-        print(self.name)
 
         # position is an integer denoting the ith row
         # in a NxN matrix describing distance between all points
