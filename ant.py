@@ -64,3 +64,6 @@ class Ant():
             range(len(self.allowed_positions)), p=path_probabilities
         )
         return choice
+
+ant = Ant(10)
+
