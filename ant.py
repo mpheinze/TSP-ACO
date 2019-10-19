@@ -1,10 +1,6 @@
 import numpy as np
 import pickle
 
-from world import World
-# import world
-# from world import World
-
 class Ant():
     """
     Class for synthetic ant
@@ -37,11 +33,13 @@ class Ant():
         #  heuristic visiblity
         self.beta = beta
 
+        self.world = world
+
     def move(self):
         p = self.evaluate_routes(self.world)
         new_position = self.choose_route(p)
         # moves the ant to a new node. Returns (old_pos, new_pos)
-        edge_distance = weighted_graph_matrix[self.position, new_position]
+        edge_distance = self.world.dist_matrix[self.position, new_position]
         self.distance_travelled += edge_distance
         
         old_position = self.position

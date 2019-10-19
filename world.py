@@ -1,7 +1,7 @@
 import numpy as np
 import random
 
-from ant import Ant
+import ant as antclass
 # import ant
 # from ant import Ant
 
@@ -34,11 +34,11 @@ class World():
 
 
     def populate_world(self):
-        first_ant = Ant(world = self, n_nodes = self.n_nodes)
+        first_ant = antclass.Ant(world = self, n_nodes = self.n_nodes)
         ant = first_ant
 
-        for i in self.n_ants - 1:
-            ant.next = Ant(world = self, n_nodes = self.n_nodes)
+        for i in range(self.n_ants - 1):
+            ant.next = antclass.Ant(world = self, n_nodes = self.n_nodes)
             ant = ant.next
         self.first_ant = first_ant
     
@@ -50,7 +50,7 @@ class World():
         phro_delta = np.zeros(shape = (self.phro_matrix.shape))        
         while ant.next is not None:
             movement = ant.move()
-            phro_delta[movement[0], movement[1]] += gamma / movement[2]
+            phro_delta[movement[0], movement[1]] += self.gamma / movement[2]
             ant = ant.next
 
         self.phro_delta = phro_delta
@@ -58,11 +58,14 @@ class World():
     def update_phro(self):
         self.phro_matrix_decay = (1 - self.rho) * self.phro_matrix + self.phro_delta
 
-    def avg_distance_tavelled(self):
+    def avg_distance_travelled(self):
         
+        ant = self.first_ant
+
         dist_sum = 0
         while ant.next is not None:
-            dist_sum += ant.distance_tavelled
+            dist_sum += ant.distance_travelled
+            ant = ant.next
 
         avg_distance = dist_sum / self.n_ants
         return avg_distance

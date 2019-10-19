@@ -13,8 +13,12 @@ N_ANTS = 100
 RHO = 0.1
 GAMMA = 1
 
-ant = ant.Ant(1, 2)
+world = world.World(N_NODES, N_ANTS, 20, RHO, GAMMA)
+world.populate_world()
 
-# world = World(N_NODES, N_ANTS, 20, RHO, GAMMA)
+for j in range(100):
+    for i in range(N_NODES-1):
+        world.move_ants()
 
-# world.populate_world()
+    print(world.avg_distance_travelled())
+
