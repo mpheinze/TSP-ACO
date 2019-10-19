@@ -15,4 +15,3 @@ y = [random.randint(1, 20) for i in range(N_NODES)]
 
 node_list = list(zip(x, y))
 dist_matrix = distance_matrix(node_list)
-
