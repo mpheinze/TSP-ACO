@@ -1,17 +1,20 @@
-import random
 import numpy as np
-import pandas as pd
 
-from utils import distance_matrix
-from matplotlib import pyplot as plt
-
+import ant
+import world
+# import ant
+# import world
+# from ant import Ant
+# from world import World
 
 # number of nodes on the map
 N_NODES = 10
+N_ANTS = 100
+RHO = 0.1
+GAMMA = 1
 
-# generating random arrays of integers
-x = [random.randint(1, 20) for i in range(N_NODES)]
-y = [random.randint(1, 20) for i in range(N_NODES)]
+ant = ant.Ant(1, 2)
 
-node_list = list(zip(x, y))
-dist_matrix = distance_matrix(node_list)
+# world = World(N_NODES, N_ANTS, 20, RHO, GAMMA)
+
+# world.populate_world()
