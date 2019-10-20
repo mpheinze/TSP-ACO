@@ -1,7 +1,5 @@
 import numpy as np
-
 from matplotlib import pyplot as plt
-
 import ant
 import world
 # import ant
@@ -34,7 +32,6 @@ for j in range(N_ITERATIONS):
         indx_list.append(j)
         dist_list.append(avg_dist)
         print(j, avg_dist)
-
 
 # plotting avg_distance over interations
 fig, ax = plt.subplots(figsize=(10, 10))
