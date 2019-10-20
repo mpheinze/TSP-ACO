@@ -1,7 +1,9 @@
 import numpy as np
+import matplotlib.pyplot as plt
 import random
 
 import ant as ant_class
+from node import Node
 
 
 class World():
@@ -12,23 +14,27 @@ class World():
         self.rho = rho
         self.gamma = gamma
 
-        # initializing distance matrix
+        # initializing nodes
         x = [random.randint(1, xy_scale) for i in range(n_nodes)]
         y = [random.randint(1, xy_scale) for i in range(n_nodes)]
-        
-        node_list = list(zip(x, y))
-        matrix = np.zeros((n_nodes, n_nodes))
+        self.node_list = [Node(i, x[i], y[i]) for i in range(n_nodes)]
 
-        for idx1, node1 in enumerate(node_list):
-            for idx2, node2 in enumerate(node_list): 
-                distance = np.sqrt((node2[0] - node1[0])**2 + (node2[1] - node1[1])**2)
-                matrix[idx1, idx2] = distance
-        
+        # initialising distance matrix
+        matrix = np.zeros((n_nodes, n_nodes))
+        for node1 in self.node_list:
+            for node2 in self.node_list:
+                distance = np.sqrt(
+                    (node2.x - node1.x)**2 + (node2.y - node1.y)**2)
+                matrix[node1.index, node2.index] = distance
+
         self.dist_matrix = matrix
-    
+
         # initializing pheromone matrix
         self.phro_matrix = np.ones((n_nodes, n_nodes))
         self.first_ant = None
+
+        # container for movements. only used when plotting paths
+        self.movements = []
 
     def populate_world(self):
         first_ant = ant_class.Ant(world=self, n_nodes=self.n_nodes)
@@ -38,15 +44,17 @@ class World():
             ant.next = ant_class.Ant(world=self, n_nodes=self.n_nodes)
             ant = ant.next
         self.first_ant = first_ant
-    
-    def move_ants(self):
+
+    def move_ants(self, collect_movements=False):
         ant = self.first_ant
-        phro_delta = np.zeros(shape = (self.phro_matrix.shape))
+        phro_delta = np.zeros(shape=(self.phro_matrix.shape))
 
         while ant.next is not None:
             movement = ant.move()
             phro_delta[movement[0], movement[1]] += self.gamma / movement[2]
             ant = ant.next
+            if collect_movements is True:
+                self.movements.append(movement)
 
         self.phro_delta = phro_delta
 
@@ -59,9 +67,17 @@ class World():
 
         while ant.next is not None:
             dist_sum += ant.distance_travelled
-            
+
             ant.reset_ant()
             ant = ant.next
 
         avg_distance = dist_sum / self.n_ants
         return avg_distance
+
+    # def plot_movements(self):
+    #     fig, ax = plt.subplots()
+    #     plt.scatter(
+    #         x=[node.x for node in self.node_list],
+    #         y=[node.x for node in self.node_list]
+    #     )
+    #     self.movements

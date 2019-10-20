@@ -1,8 +1,9 @@
 import numpy as np
 import pickle
 
+
 class Ant():
-    def __init__(self, world, n_nodes, alpha=1, beta=1):
+    def __init__(self, world, n_nodes, alpha=1.2, beta=1):
 
         # initialising previous and next ant
         self.next = None
@@ -27,7 +28,7 @@ class Ant():
         # moves the ant to a new node. Returns (old_pos, new_pos)
         edge_distance = self.world.dist_matrix[self.position, new_position]
         self.distance_travelled += edge_distance
-        
+
         old_position = self.position
         self.position = new_position
 
@@ -55,7 +56,7 @@ class Ant():
             range(len(self.allowed_positions)), p=path_probabilities
         )
         return choice
-    
+
     def reset_ant(self):
         self.position = 1
         self.distance_travelled = 0

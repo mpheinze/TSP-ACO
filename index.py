@@ -8,10 +8,10 @@ import world
 # from world import World
 
 # number of nodes on the map
-N_NODES = 10
-N_ANTS = 300
+N_NODES = 20
+N_ANTS = 400
 N_ITERATIONS = 1000
-RHO = 0.1
+RHO = 0.3
 GAMMA = 1
 
 indx_list = []
@@ -22,13 +22,13 @@ world = world.World(N_NODES, N_ANTS, 20, RHO, GAMMA)
 world.populate_world()
 
 for j in range(N_ITERATIONS):
-    for i in range(N_NODES-1):
+    for i in range(N_NODES - 1):
         world.move_ants()
         world.update_phro()
 
     avg_dist = world.finalize_run()
-    
-    if j % 10 == 0:
+
+    if j % 1 == 0:
         indx_list.append(j)
         dist_list.append(avg_dist)
         print(j, avg_dist)
