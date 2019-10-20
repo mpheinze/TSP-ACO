@@ -1,9 +1,8 @@
 import numpy as np
 import random
 
-import ant as antclass
-# import ant
-# from ant import Ant
+import ant as ant_class
+
 
 class World():
     def __init__(self, n_nodes, n_ants, xy_scale=20, rho=1, gamma=1):
@@ -29,25 +28,21 @@ class World():
     
         # initializing pheromone matrix
         self.phro_matrix = np.ones((n_nodes, n_nodes))
-
         self.first_ant = None
 
-
     def populate_world(self):
-        first_ant = antclass.Ant(world = self, n_nodes = self.n_nodes)
+        first_ant = ant_class.Ant(world=self, n_nodes=self.n_nodes)
         ant = first_ant
 
         for i in range(self.n_ants - 1):
-            ant.next = antclass.Ant(world = self, n_nodes = self.n_nodes)
+            ant.next = ant_class.Ant(world=self, n_nodes=self.n_nodes)
             ant = ant.next
         self.first_ant = first_ant
     
-
     def move_ants(self):
         ant = self.first_ant
-        # 0 initialised matrix with identical shape to phro_matrix
-        # to collect delta tau's
-        phro_delta = np.zeros(shape = (self.phro_matrix.shape))        
+        phro_delta = np.zeros(shape = (self.phro_matrix.shape))
+
         while ant.next is not None:
             movement = ant.move()
             phro_delta[movement[0], movement[1]] += self.gamma / movement[2]
@@ -56,15 +51,16 @@ class World():
         self.phro_delta = phro_delta
 
     def update_phro(self):
-        self.phro_matrix_decay = (1 - self.rho) * self.phro_matrix + self.phro_delta
+        self.phro_matrix = (1 - self.rho) * self.phro_matrix + self.phro_delta
 
-    def avg_distance_travelled(self):
-        
+    def finalize_run(self):
         ant = self.first_ant
-
         dist_sum = 0
+
         while ant.next is not None:
             dist_sum += ant.distance_travelled
+            
+            ant.reset_ant()
             ant = ant.next
 
         avg_distance = dist_sum / self.n_ants

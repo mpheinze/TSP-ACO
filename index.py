@@ -1,5 +1,7 @@
 import numpy as np
 
+from matplotlib import pyplot as plt
+
 import ant
 import world
 # import ant
@@ -9,16 +11,37 @@ import world
 
 # number of nodes on the map
 N_NODES = 10
-N_ANTS = 100
+N_ANTS = 300
+N_ITERATIONS = 1000
 RHO = 0.1
 GAMMA = 1
 
+indx_list = []
+dist_list = []
+
+# initializing world
 world = world.World(N_NODES, N_ANTS, 20, RHO, GAMMA)
 world.populate_world()
 
-for j in range(100):
+for j in range(N_ITERATIONS):
     for i in range(N_NODES-1):
         world.move_ants()
+        world.update_phro()
 
-    print(world.avg_distance_travelled())
+    avg_dist = world.finalize_run()
+    
+    if j % 10 == 0:
+        indx_list.append(j)
+        dist_list.append(avg_dist)
+        print(j, avg_dist)
 
+
+# plotting avg_distance over interations
+fig, ax = plt.subplots(figsize=(10, 10))
+ax = plt.plot(indx_list, dist_list)
+
+plt.xlabel('Iterations')
+plt.ylabel('Avg. Distance')
+
+plt.savefig('convergence_plot.png', format='png')
+plt.show()

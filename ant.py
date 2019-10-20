@@ -2,37 +2,23 @@ import numpy as np
 import pickle
 
 class Ant():
-    """
-    Class for synthetic ant
-    """
-
     def __init__(self, world, n_nodes, alpha=1, beta=1):
 
         # initialising previous and next ant
         self.next = None
-        # Naming the ant
+        self.n_nodes = n_nodes
+
         with open('./naming/names.txt', 'rb') as f:
             names = pickle.load(f)
         self.name = np.random.choice(names)
-        print(self.name)
 
-        # position is an integer denoting the ith row
-        # in a NxN matrix describing distance between all points
-        # Ant is placed on a random position in the graph by default
         self.position = 1
-
-        # array describing allowed subset of nodes
+        self.distance_travelled = 0
         self.allowed_positions = np.array([True] * n_nodes)
         self.allowed_positions[self.position] = False
 
-        # var for tracking combined distance of ant
-        self.distance_travelled = 0
-
-        # weighting parameters for pheromone strength and
         self.alpha = alpha
-        #  heuristic visiblity
         self.beta = beta
-
         self.world = world
 
     def move(self):
@@ -52,8 +38,7 @@ class Ant():
         # subsets matrix the i'th row
         choice_set_phro = world.phro_matrix[self.position]
         choice_set_dist = world.dist_matrix[self.position]
-        # right now it uses the same matrix for heuristic distance
-        # and pheromones. it should obviously be different values
+
         tau = choice_set_phro**self.alpha
         eta = choice_set_dist**self.beta
         # multiplying by allowed_positions (bool)
@@ -70,3 +55,9 @@ class Ant():
             range(len(self.allowed_positions)), p=path_probabilities
         )
         return choice
+    
+    def reset_ant(self):
+        self.position = 1
+        self.distance_travelled = 0
+        self.allowed_positions = np.array([True] * self.n_nodes)
+        self.allowed_positions[self.position] = False
