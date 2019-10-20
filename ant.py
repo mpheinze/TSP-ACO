@@ -3,7 +3,7 @@ import pickle
 
 
 class Ant():
-    def __init__(self, world, n_nodes, alpha=1.2, beta=1):
+    def __init__(self, world, n_nodes, alpha=1, beta=1):
 
         # initialising previous and next ant
         self.next = None
@@ -21,6 +21,7 @@ class Ant():
         self.alpha = alpha
         self.beta = beta
         self.world = world
+        self.path = [1]
 
     def move(self):
         p = self.evaluate_routes(self.world)
@@ -33,6 +34,10 @@ class Ant():
         self.position = new_position
 
         self.allowed_positions[new_position] = False
+
+        # saving path for plotting purposes
+        self.path.append(self.position)
+
         return (old_position, self.position, edge_distance)
 
     def evaluate_routes(self, world):
@@ -62,3 +67,4 @@ class Ant():
         self.distance_travelled = 0
         self.allowed_positions = np.array([True] * self.n_nodes)
         self.allowed_positions[self.position] = False
+        self.path = [1]

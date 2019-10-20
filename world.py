@@ -1,5 +1,5 @@
 import numpy as np
-import matplotlib.pyplot as plt
+from record_keeper import RecordKeeper
 import random
 
 import ant as ant_class
@@ -33,8 +33,8 @@ class World():
         self.phro_matrix = np.ones((n_nodes, n_nodes))
         self.first_ant = None
 
-        # container for movements. only used when plotting paths
-        self.movements = []
+        # initialising record_keeper
+        self.record_keeper = RecordKeeper(self)
 
     def populate_world(self):
         first_ant = ant_class.Ant(world=self, n_nodes=self.n_nodes)
@@ -45,7 +45,7 @@ class World():
             ant = ant.next
         self.first_ant = first_ant
 
-    def move_ants(self, collect_movements=False):
+    def move_ants(self):
         ant = self.first_ant
         phro_delta = np.zeros(shape=(self.phro_matrix.shape))
 
@@ -53,8 +53,6 @@ class World():
             movement = ant.move()
             phro_delta[movement[0], movement[1]] += self.gamma / movement[2]
             ant = ant.next
-            if collect_movements is True:
-                self.movements.append(movement)
 
         self.phro_delta = phro_delta
 
@@ -66,18 +64,17 @@ class World():
         dist_sum = 0
 
         while ant.next is not None:
-            dist_sum += ant.distance_travelled
+            distance_travelled = ant.distance_travelled
+            dist_sum += distance_travelled
+            self.record_keeper.record_distance(distance_travelled, ant)
 
-            ant.reset_ant()
             ant = ant.next
 
         avg_distance = dist_sum / self.n_ants
         return avg_distance
 
-    # def plot_movements(self):
-    #     fig, ax = plt.subplots()
-    #     plt.scatter(
-    #         x=[node.x for node in self.node_list],
-    #         y=[node.x for node in self.node_list]
-    #     )
-    #     self.movements
+    def reset_ants(self):
+        ant = self.first_ant
+        while ant.next is not None:
+            ant.reset_ant()
+            ant = ant.next
