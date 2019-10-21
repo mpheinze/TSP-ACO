@@ -62,7 +62,6 @@ class Ant():
         choice = np.random.choice(
             range(len(self.allowed_positions)), p=path_probabilities
         )
-        print(str(choice), f'probs {path_probabilities}')
         return choice
 
     def reset_ant(self):

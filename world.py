@@ -33,6 +33,8 @@ class World():
 
         # initializing pheromone matrix
         self.phro_matrix = np.ones((n_nodes, n_nodes))
+        self.delta_matrix = np.zeros((n_nodes, n_nodes))
+        
         self.first_ant = None
 
         # initialising record_keeper
@@ -49,17 +51,16 @@ class World():
 
     def move_ants(self):
         ant = self.first_ant
-        phro_delta = np.zeros(shape=(self.phro_matrix.shape))
 
         while ant.next is not None:
             movement = ant.move()
-            phro_delta[movement[0], movement[1]] += self.gamma / movement[2]
             ant = ant.next
 
-        self.phro_delta = phro_delta
 
     def update_phro(self):
-        self.phro_matrix = (1 - self.rho) * self.phro_matrix + self.phro_delta
+        self.phro_matrix = (1 - self.rho) * self.phro_matrix + self.delta_matrix
+        self.delta_matrix = np.zeros(shape=(self.n_nodes, self.n_nodes))
+
 
     def finalize_run(self):
         ant = self.first_ant
@@ -67,6 +68,10 @@ class World():
 
         while ant.next is not None:
             distance_travelled = ant.distance_travelled
+
+            for i, j in zip(ant.path[:-1], ant.path[1:]):
+                self.delta_matrix[i, j] += self.gamma / distance_travelled
+
             dist_sum += distance_travelled
             self.record_keeper.record_distance(distance_travelled, ant)
 
