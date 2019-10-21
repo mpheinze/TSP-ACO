@@ -9,8 +9,8 @@ from record_keeper import RecordKeeper
 # from world import World
 
 # number of nodes on the map
-N_NODES = 10
-N_ANTS = 400
+N_NODES = 20
+N_ANTS = 4
 N_ITERATIONS = 961
 RHO = 0.35
 GAMMA = 2

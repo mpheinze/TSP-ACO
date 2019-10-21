@@ -54,6 +54,7 @@ class Ant():
         eta = eta * self.allowed_positions
 
         path_probabilities = (tau * eta) / tau.dot(eta)
+
         return path_probabilities
 
     def choose_route(self, path_probabilities):
@@ -61,6 +62,7 @@ class Ant():
         choice = np.random.choice(
             range(len(self.allowed_positions)), p=path_probabilities
         )
+        print(str(choice), f'probs {path_probabilities}')
         return choice
 
     def reset_ant(self):

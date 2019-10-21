@@ -56,4 +56,5 @@ class RecordKeeper(object):
             x = [self.nodes_x[i] for i in ant.path]
             y = [self.nodes_y[i] for i in ant.path]
             self.axes.plot(x, y)
+            self.axes.text(self.nodes_x[1], self.nodes_y[1], 'Start')
         plt.show()
