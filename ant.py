@@ -43,12 +43,13 @@ class Ant():
     def evaluate_routes(self, world):
         # subsets matrix the i'th row
         choice_set_phro = world.phro_matrix[self.position]
-        choice_set_dist = world.dist_matrix[self.position]
+        choice_set_dist = world.attractiveness_matrix[self.position]
 
         tau = choice_set_phro**self.alpha
         eta = choice_set_dist**self.beta
         # multiplying by allowed_positions (bool)
         # to force weights of disallowed to positions to 0
+
         tau = tau * self.allowed_positions
         eta = eta * self.allowed_positions
 

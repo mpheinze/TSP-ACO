@@ -29,7 +29,7 @@ for j in range(N_ITERATIONS):
 
     avg_dist = world.finalize_run()
 
-    if j % 240 == 0:
+    if j % 30 == 0:
         indx_list.append(j)
         dist_list.append(avg_dist)
         print(j, avg_dist)

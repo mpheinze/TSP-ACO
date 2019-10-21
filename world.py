@@ -28,6 +28,8 @@ class World():
                 matrix[node1.index, node2.index] = distance
 
         self.dist_matrix = matrix
+        self.attractiveness_matrix = (1 / self.dist_matrix)
+        np.fill_diagonal(self.attractiveness_matrix, 0)
 
         # initializing pheromone matrix
         self.phro_matrix = np.ones((n_nodes, n_nodes))
