@@ -3,7 +3,7 @@ import pickle
 
 
 class Ant():
-    def __init__(self, world, n_nodes, alpha=1, beta=1):
+    def __init__(self, world, n_nodes, alpha=1.0, beta=1.10):
 
         # initialising previous and next ant
         self.next = None
