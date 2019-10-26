@@ -6,17 +6,20 @@ from record_keeper import RecordKeeper
 
 
 # number of nodes on the map
-N_NODES = 15
-N_ANTS = 300
-N_ITERATIONS = 400
-RHO = 0.30
-GAMMA = 2
+N_NODES = 10
+N_ANTS = 500
+N_ITERATIONS = 500
+
+ALPHA = 1
+BETA = 1
+GAMMA = 1
+RHO = 0.2
 
 indx_list = []
 dist_list = []
 
 # initializing world
-world = world.World(N_NODES, N_ANTS, 20, RHO, GAMMA)
+world = world.World(N_NODES, N_ANTS, 20, alpha=ALPHA, beta=BETA, gamma=GAMMA, rho=RHO)
 world.populate_world()
 
 for j in range(N_ITERATIONS):
@@ -24,13 +27,7 @@ for j in range(N_ITERATIONS):
         world.move_ants()
 
     world.update_phro()
-
     avg_dist = world.finalize_run()
+    print(j, avg_dist)
 
-    if j % 50 == 0:
-        indx_list.append(j)
-        dist_list.append(avg_dist)
-        print(j, avg_dist)
-        world.record_keeper.render_map()
-        world.record_keeper.plot_best_paths()
     world.reset_ants()

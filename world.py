@@ -1,16 +1,27 @@
 import numpy as np
-from record_keeper import RecordKeeper
 import random
 
-import ant as ant_class
+import ant as Ant
+
 from node import Node
+from record_keeper import RecordKeeper
 
-
-class World():
-    def __init__(self, n_nodes, n_ants, xy_scale=20, rho=1, gamma=1):
+class World(object):
+    def __init__(self, n_nodes, n_ants, xy_scale=20, alpha=1, beta=1, gamma=1, rho=1):
+        """
+        World class object
+        generates the world with a set of nodes
+        populates the worls with ants
+        moves the ants
+        updates pheromone trail levels
+        """
         self.n_nodes = n_nodes
         self.n_ants = n_ants
         self.xy_scale = xy_scale
+        
+        # setting constants
+        self.alpha = alpha
+        self.beta = beta
         self.rho = rho
         self.gamma = gamma
 
@@ -41,11 +52,11 @@ class World():
         self.record_keeper = RecordKeeper(self)
 
     def populate_world(self):
-        first_ant = ant_class.Ant(world=self, n_nodes=self.n_nodes)
+        first_ant = Ant.Ant(world=self, n_nodes=self.n_nodes, alpha=self.alpha, beta=self.beta)
         ant = first_ant
 
         for i in range(self.n_ants - 1):
-            ant.next = ant_class.Ant(world=self, n_nodes=self.n_nodes)
+            ant.next = Ant.Ant(world=self, n_nodes=self.n_nodes, alpha=self.alpha, beta=self.beta)
             ant = ant.next
         self.first_ant = first_ant
 
@@ -56,11 +67,9 @@ class World():
             movement = ant.move()
             ant = ant.next
 
-
     def update_phro(self):
         self.phro_matrix = (1 - self.rho) * self.phro_matrix + self.delta_matrix
         self.delta_matrix = np.zeros(shape=(self.n_nodes, self.n_nodes))
-
 
     def finalize_run(self):
         ant = self.first_ant
