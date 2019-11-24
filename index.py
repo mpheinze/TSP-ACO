@@ -17,7 +17,7 @@ ALPHA = 1
 BETA = 1
 GAMMA = 1
 RHO = 0.2
-ACO_MODE = 'rank_system'
+ACO_MODE = 'elite_system'
 RANK_FRAC = 0.1
 
 
@@ -49,3 +49,6 @@ for j in range(N_ITERATIONS):
 
     # Step 4: Resetting ants in world
     world.reset_ants()
+
+# step 5: plot error history
+world.record_keeper.plot_error_hist()

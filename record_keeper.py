@@ -23,6 +23,7 @@ class RecordKeeper(object):
         self.top_ants = [None] * self.world.n_top_ants
 
         self.avg_dist = 0
+        self.avg_dist_hist = []
 
         self.axes = None
 
@@ -67,4 +68,12 @@ class RecordKeeper(object):
             print(f'Path: {ant.path}')
             self.axes.plot(x, y)
             self.axes.text(self.nodes_x[1], self.nodes_y[1], 'Start')
+        plt.show()
+
+    def plot_error_hist(self):
+        error = self.world.record_keeper.avg_dist_hist
+        sns.lineplot(
+            x=np.linspace(0,len(error), len(error)),
+            y=error
+        )
         plt.show()

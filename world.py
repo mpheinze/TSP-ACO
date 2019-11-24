@@ -94,4 +94,5 @@ class World(object):
             ant.reset_ant()
             ant = ant.next
         
+        self.record_keeper.avg_dist_hist.append(self.record_keeper.avg_dist)
         self.record_keeper.avg_dist = 0
