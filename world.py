@@ -5,9 +5,11 @@ import ant as Ant
 
 from node import Node
 from record_keeper import RecordKeeper
+from aco_variations import Mode
+
 
 class World(object):
-    def __init__(self, n_nodes, n_ants, xy_scale=20, alpha=1, beta=1, gamma=1, rho=1):
+    def __init__(self, n_nodes, n_ants, xy_scale=20, alpha=1, beta=1, gamma=1, rho=1, aco_mode='ant_system', rank_frac=0.1):
         """
         World class object
         generates the world with a set of nodes
@@ -24,6 +26,8 @@ class World(object):
         self.beta = beta
         self.rho = rho
         self.gamma = gamma
+        self.n_top_ants = int(n_ants * rank_frac)
+        self.rank_frac = rank_frac
 
         # initializing nodes
         x = [random.randint(1, xy_scale) for i in range(n_nodes)]
@@ -50,6 +54,7 @@ class World(object):
 
         # initialising record_keeper
         self.record_keeper = RecordKeeper(self)
+        self.aco_mode = Mode(self, mode=aco_mode, rank_frac=rank_frac)
 
     def populate_world(self):
         first_ant = Ant.Ant(world=self, n_nodes=self.n_nodes, alpha=self.alpha, beta=self.beta)
@@ -67,30 +72,26 @@ class World(object):
             movement = ant.move()
             ant = ant.next
 
+
     def update_phro(self):
-        self.phro_matrix = (1 - self.rho) * self.phro_matrix + self.delta_matrix
-        self.delta_matrix = np.zeros(shape=(self.n_nodes, self.n_nodes))
+        _delta_matrix = self.aco_mode.calculate_delta_matrix()
+        self.phro_matrix = (1 - self.rho) * self.phro_matrix + _delta_matrix
+
 
     def finalize_run(self):
+        _counter = 1
         ant = self.first_ant
-        dist_sum = 0
 
         while ant.next is not None:
-            distance_travelled = ant.distance_travelled
-
-            for i, j in zip(ant.path[:-1], ant.path[1:]):
-                self.delta_matrix[i, j] += self.gamma / distance_travelled
-
-            dist_sum += distance_travelled
-            self.record_keeper.record_distance(distance_travelled, ant)
-
+            self.record_keeper.record_distance(ant, _counter)
             ant = ant.next
+            _counter += 1
 
-        avg_distance = dist_sum / self.n_ants
-        return avg_distance
 
     def reset_ants(self):
         ant = self.first_ant
         while ant.next is not None:
             ant.reset_ant()
             ant = ant.next
+        
+        self.record_keeper.avg_dist = 0
