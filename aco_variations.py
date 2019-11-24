@@ -59,5 +59,3 @@ class Mode():
         for ant in self.world.record_keeper.top_ants:
             for i, j in zip(ant.path[:-1], ant.path[1:]):
                 self.delta_matrix[i, j] += (self.world.gamma * (1 / self.world.rank_frac)) / ant.distance_travelled
-
-    
