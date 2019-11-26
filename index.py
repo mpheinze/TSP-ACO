@@ -3,15 +3,14 @@
 import numpy as np
 
 from matplotlib import pyplot as plt
-
-from world import World
 from record_keeper import RecordKeeper
+from world import World
 
 
 # number of nodes on the map
-N_NODES = 15
+N_NODES = 20
 N_ANTS = 100
-N_ITERATIONS = 201
+N_ITERATIONS = 500
 
 ALPHA = 1
 BETA = 1
@@ -44,11 +43,11 @@ for j in range(N_ITERATIONS):
 
     # Intermediary step: printing results
     print(j, world.record_keeper.avg_dist)
-    if j % 100 == 0:
+    if j % 30 == 0:
         world.record_keeper.plot_best_paths()
 
     # Step 4: Resetting ants in world
     world.reset_ants()
 
-# step 5: plot error history
+# Step 5: Plot average distance travelled over iterations
 world.record_keeper.plot_error_hist()

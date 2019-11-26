@@ -1,22 +1,18 @@
 import numpy as np
 import random
 
-import ant as Ant
-
+from ant import Ant
 from node import Node
-from record_keeper import RecordKeeper
 from aco_variations import Mode
-
+from record_keeper import RecordKeeper
 
 class World(object):
+    '''
+
+    '''
+
     def __init__(self, n_nodes, n_ants, xy_scale=20, alpha=1, beta=1, gamma=1, rho=1, aco_mode='ant_system', rank_frac=0.1):
-        """
-        World class object
-        generates the world with a set of nodes
-        populates the worls with ants
-        moves the ants
-        updates pheromone trail levels
-        """
+
         self.n_nodes = n_nodes
         self.n_ants = n_ants
         self.xy_scale = xy_scale
@@ -57,11 +53,11 @@ class World(object):
         self.aco_mode = Mode(self, mode=aco_mode, rank_frac=rank_frac)
 
     def populate_world(self):
-        first_ant = Ant.Ant(world=self, n_nodes=self.n_nodes, alpha=self.alpha, beta=self.beta)
+        first_ant = Ant(world=self, n_nodes=self.n_nodes, alpha=self.alpha, beta=self.beta)
         ant = first_ant
 
         for i in range(self.n_ants - 1):
-            ant.next = Ant.Ant(world=self, n_nodes=self.n_nodes, alpha=self.alpha, beta=self.beta)
+            ant.next = Ant(world=self, n_nodes=self.n_nodes, alpha=self.alpha, beta=self.beta)
             ant = ant.next
         self.first_ant = first_ant
 

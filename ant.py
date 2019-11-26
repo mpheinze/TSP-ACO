@@ -28,6 +28,7 @@ class Ant():
     def move(self):
         p = self.evaluate_routes(self.world)
         new_position = self.choose_route(p)
+
         # moves the ant to a new node. Returns (old_pos, new_pos)
         edge_distance = self.world.dist_matrix[self.position, new_position]
         self.distance_travelled += edge_distance
@@ -56,7 +57,7 @@ class Ant():
         eta = eta * self.allowed_positions
 
         path_probabilities = (tau * eta) / tau.dot(eta)
-
+        
         return path_probabilities
 
     def choose_route(self, path_probabilities):
