@@ -61,7 +61,7 @@ class RecordKeeper(object):
         )
         self.axes = axes
 
-    def plot_best_paths(self):
+    def plot_best_paths(self, *, save_plot=False, path=None):
         self.render_map()
         for ant in self.top_ants[:3]:
             x = [self.nodes_x[i] for i in ant.path]
@@ -69,12 +69,24 @@ class RecordKeeper(object):
             print(f'Path: {ant.path}')
             self.axes.plot(x, y)
             self.axes.text(self.nodes_x[1], self.nodes_y[1], 'Start')
-        plt.show()
+        
+        if save_plot:
+            plt.savefig(path + '.png', format='png')
+        else:
+            plt.show()
 
-    def plot_error_hist(self):
-        error = self.world.record_keeper.avg_dist_hist
-        sns.lineplot(
-            x=np.linspace(0,len(error), len(error)),
-            y=error
-        )
-        plt.show()
+        plt.close()
+
+    def plot_error_hist(self, *, save_plot=False, path=None):
+        err_data = self.world.record_keeper.avg_dist_hist
+        index = np.linspace(0, len(err_data), len(err_data))
+        
+        
+        plt.plot(index, err_data)
+        
+        if save_plot:
+            plt.savefig(path + '.png', format='png')
+        else:
+            plt.show()
+
+        plt.close()

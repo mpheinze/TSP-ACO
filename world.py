@@ -11,7 +11,7 @@ class World(object):
 
     '''
 
-    def __init__(self, n_nodes, n_ants, xy_scale=20, alpha=1, beta=1, gamma=1, rho=1, aco_mode='ant_system', rank_frac=0.1):
+    def __init__(self, n_nodes, n_ants, xy_scale=20, alpha=1, beta=1, gamma=1, rho=1, aco_mode='ant_system', rank_frac=0.1, save_output=False):
 
         self.n_nodes = n_nodes
         self.n_ants = n_ants
@@ -82,7 +82,6 @@ class World(object):
             self.record_keeper.record_distance(ant, _counter)
             ant = ant.next
             _counter += 1
-
 
     def reset_ants(self):
         ant = self.first_ant
