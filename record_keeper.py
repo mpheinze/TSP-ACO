@@ -1,14 +1,10 @@
 import numpy as np
 import matplotlib.pyplot as plt
-import seaborn as sns
-
-sns.set()
 
 
 class RecordKeeper(object):
-    """
-    
-    """
+    '''
+    '''
 
     def __init__(self, world):
 
@@ -80,7 +76,6 @@ class RecordKeeper(object):
     def plot_error_hist(self, *, save_plot=False, path=None):
         err_data = self.world.record_keeper.avg_dist_hist
         index = np.linspace(0, len(err_data), len(err_data))
-        
         
         plt.plot(index, err_data)
         
